@@ -15,8 +15,8 @@ Example
 
     var first = new State(
         "first",
-        (s) => {Console.WriteLine("first.Enter"); return true;},
-        (s) => {Console.WriteLine("first.Update"); return true;},
+        (s) => { Console.WriteLine("first.Enter"); return true; },
+        (s) => { Console.WriteLine("first.Update"); return true; },
         (s) => { Console.WriteLine("first.Exit"); machine.TransitionTo(second);  return true; }
     );
 
