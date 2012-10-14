@@ -3,6 +3,10 @@ PicoFSM
 
 Extremely lightweight FSM library, supports edge definitions in the form of TransitionToWhen(state,condition)
 
+Install from Package Manager Console:
+
+    PM> Install-Package picoFSM
+
 Example
 -------
 
