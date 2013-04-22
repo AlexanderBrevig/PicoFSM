@@ -14,7 +14,7 @@ Example
 
     var second = new State(
         "second",
-        (s) => { Console.WriteLine("first.Update until TransitionTo"); return false; }
+        (s) => { Console.WriteLine("second.Update until TransitionTo"); return false; }
     );
 
     var first = new State(
@@ -46,9 +46,9 @@ Prints:
     first.Enter
     first.Update
     first.Exit
-    first.Update until TransitionTo
-    first.Update until TransitionTo
-    first.Update until TransitionTo
+    second.Update until TransitionTo
+    second.Update until TransitionTo
+    second.Update until TransitionTo
     ...
 
 Refer to another example here:
