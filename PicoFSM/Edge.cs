@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PicoFSM
+public class Edge
 {
-    public class Edge
+    public Edge(PicoFSM.State state, Func<PicoFSM.State, bool> condition, Action<PicoFSM.State> callback)
     {
-        public Edge(State state, Func<State, bool> condition)
-        {
-            this.State = state;
-            this.Condition = condition;
-        }
-
-        public State State { get; set; }
-        public Func<State, bool> Condition { get; set; }
+        this.State = state;
+        this.Condition = condition;
+        this.Callback = callback;
     }
+
+    public PicoFSM.State State { get; set; }
+    public Func<PicoFSM.State, bool> Condition { get; set; }
+    public Action<PicoFSM.State> Callback { get; set; }
 }

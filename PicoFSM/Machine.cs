@@ -15,57 +15,55 @@ namespace PicoFSM
         public void Update()
         {
             foreach (var edge in Edges) {
-                if (edge.Condition(currentState)) {
+                if (currentState != null && edge.Condition(currentState)) {
                     TransitionTo(edge.State);
+                    if (edge.Callback != null) {
+                        edge.Callback(edge.State);
+                    }
                 }
             }
 
-            if (exitNextTick) {
-                if (currentState.OnExit != null) {
-                    currentState.OnExit(currentState);
-                }
-                currentState = nextState;
-                nextState = null;
-                exitNextTick = false;
-            } else if (nextState != null && currentState != null) {
+            if (nextState != null && currentState != null) {
                 if (currentState.OnExit == null || currentState.OnExit(currentState)) {
                     currentState = null;
                 }
-            } else if (nextState != null && currentState == null) {
+            }
+            else if (nextState != null && currentState == null) {
                 if (nextState.OnEnter == null || nextState.OnEnter(nextState)) {
                     currentState = nextState;
                     nextState = null;
                 }
-            } else if (currentState != null) {
+            }
+            else if (currentState != null) {
                 if (currentState.OnUpdate(currentState)) {
                     exitNextTick = true;
                 }
             }
         }
 
-        public void TransitionTo(State next)
+        public void TransitionTo(PicoFSM.State next)
         {
             if (next != null && next != nextState) {
-                if (currentState == null) {
-                    if (next.OnEnter == null || (next.OnEnter != null && next.OnEnter(next))) {
-                        currentState = next;
-                    }
-                } else {
-                    nextState = next;
-                }
+                nextState = next;
             }
         }
 
-        public Machine TransitionToWhen(State state, Func<State, bool> condition)
+        public Machine TransitionToWhen(PicoFSM.State state, Func<PicoFSM.State, bool> condition)
         {
-            Edges.Add(new Edge(state, condition));
+            Edges.Add(new Edge(state, condition, null));
+            return this;
+        }
+
+        public Machine TransitionToWhenThen(PicoFSM.State state, Func<PicoFSM.State, bool> condition, Action<PicoFSM.State> callback)
+        {
+            Edges.Add(new Edge(state, condition, callback));
             return this;
         }
 
         public List<Edge> Edges { get; set; }
 
-        private State currentState;
-        private State nextState;
+        private PicoFSM.State currentState;
+        private PicoFSM.State nextState;
         private bool exitNextTick = false;
     }
 }

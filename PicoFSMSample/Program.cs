@@ -60,6 +60,8 @@ namespace PicoFSM
                 return State.GlobalPayload.ContainsKey("alarmSounded");
             });
 
+            machine.TransitionTo(State.EMPTY);
+
             /// process the state machine
             for (iteration = 0; iteration < 12; iteration++) {
                 machine.Update();

@@ -21,9 +21,20 @@ namespace PicoFSM
             this.Name = name;
             this.OnEnter = (s) => { Active = true; return enter(s); };
             this.OnUpdate = update;
-            this.OnExit = (s) => { Active = false; return exit(s); };
+            this.OnExit = (s) => {
+                if (exit(s)) {
+                    Active = false;
+                }
+                return !Active;
+            };
+
             Initialize();
         }
+
+        public static readonly State EMPTY = new State("empty", AlwaysTrue);
+
+        public static bool AlwaysTrue(State arg) { return true; }
+        public static bool AlwaysFalse(State arg) { return false; }
 
         public override string ToString()
         {
@@ -38,14 +49,15 @@ namespace PicoFSM
 
         public string Name { get; set; }
 
+        public bool Active { get; set; }
+
         private void Initialize()
         {
             Payload = new Dictionary<object, object>();
-            if (GlobalPayload == null) {
+            if (GlobalPayload == null)
+            {
                 GlobalPayload = new Dictionary<object, object>();
             }
         }
-
-        public bool Active { get; set; }
     }
 }
